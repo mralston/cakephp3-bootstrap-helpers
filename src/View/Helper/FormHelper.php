@@ -126,7 +126,8 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
             'buttonGroupVertical' => '<div class="btn-group-vertical{{attrs.class}}" role="group"{{attrs}}>{{content}}</div>',
             'buttonToolbar' => '<div class="btn-toolbar{{attrs.class}}" role="toolbar"{{attrs}}>{{content}}</div>',
             'fancyFileInput' => '{{fileInput}}<div class="input-group"><div class="input-group-btn">{{button}}</div>{{input}}</div>',
-            'confirmJs' => '{{confirm}}'
+            'confirmJs' => '{{confirm}}',
+            'selectedClass' => 'selected',
         ],
         'buttons' => [
             'type' => 'primary'
@@ -233,7 +234,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string An formatted opening FORM tag.
      */
-    public function create($model = null, Array $options = array()) {
+    public function create($model = null, array $options = []): string {
         $options += [
             'horizontal' => false,
             'inline' => false
@@ -444,7 +445,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string Completed form widget.
      */
-    public function control($fieldName, array $options = array()) {
+    public function control($fieldName, array $options = []): string {
 
         $options += [
             'type' => null,
@@ -511,7 +512,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
     /**
      * {@inheritDoc}
      */
-     protected function _inputLabel($fieldName, $label, $options) {
+     protected function _inputLabel(string $fieldName, $label = null, array $options = []): string {
         $groupTypes = ['radio', 'inlineradio', 'multicheckbox', 'date', 'time', 'datetime'];
         if (in_array($options['type'], $groupTypes, true)) {
             $options['id'] = false;
@@ -569,7 +570,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string A generated file input.
      */
-    public function file($fieldName, array $options = []) {
+    public function file($fieldName, array $options = []): string {
         $options += ['secure' => true];
         $options = $this->_initInputField($fieldName, $options);
         unset($options['type']);
@@ -599,7 +600,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @link http://book.cakephp.org/3.0/en/views/helpers/form.html#creating-button-elements
      */
-    public function button($title, array $options = []) {
+    public function button($title, array $options = []): string {
         list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::button($title, $this->_addButtonClasses($options)), $easyIcon);
     }
@@ -752,7 +753,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      * @return string A HTML submit button
      * @link http://book.cakephp.org/3.0/en/views/helpers/form.html#creating-buttons-and-submit-elements
      */
-    public function submit($caption = null, array $options = []) {
+    public function submit($caption = null, array $options = []): string {
         return parent::submit($caption, $this->_addButtonClasses($options));
     }
 
