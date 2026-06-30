@@ -58,7 +58,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      */
     protected $_defaultConfig = [
         'idPrefix' => null,
-        'errorClass' => 'has-error',
+        'errorClass' => 'is-invalid',
         'typeMap' => [
             'string' => 'text', 'datetime' => 'datetime', 'boolean' => 'checkbox',
             'timestamp' => 'datetime', 'text' => 'textarea', 'time' => 'time',
@@ -68,15 +68,15 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
 
         'templates' => [
             'button' => '<button{{attrs}}>{{text}}</button>',
-            'checkbox' => '<input type="checkbox" name="{{name}}" value="{{value}}"{{attrs}}>',
+            'checkbox' => '<input type="checkbox" class="form-check-input{{attrs.class}}" name="{{name}}" value="{{value}}"{{attrs}}>',
             'checkboxFormGroup' => '{{label}}',
-            'checkboxWrapper' => '<div class="checkbox">{{label}}</div>',
-            'checkboxContainer' => '<div class="checkbox {{required}}">{{content}}</div>',
-            'checkboxContainerHorizontal' => '<div class="form-group"><div class="{{inputColumnOffsetClass}} {{inputColumnClass}}"><div class="checkbox {{required}}">{{content}}</div></div></div>',
-            'confirmJs' => '{{confirm}}',
-            'dateWidget' => '<div class="row">{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}</div>',
-            'error' => '<span class="help-block error-message">{{content}}</span>',
-            'errorHorizontal' => '<span class="help-block error-message {{errorColumnClass}}">{{content}}</span>',
+            'checkboxWrapper' => '<div class="form-check">{{label}}</div>',
+            'checkboxContainer' => '<div class="form-check checkbox{{required}}">{{content}}</div>',
+            'checkboxContainerHorizontal' => '<div class="form-group row"><div class="{{labelColumnClass}}"></div><div class="{{inputColumnClass}}"><div class="form-check checkbox{{required}}">{{content}}</div></div></div>',
+            'multicheckboxContainer' => '<fieldset class="form-group {{type}}{{required}}">{{content}}</fieldset>',
+            'multicheckboxContainerHorizontal' => '<fieldset class="form-group {{type}}{{required}}"><div class="row">{{content}}</div></fieldset>','dateWidget' => '<div class="row">{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}{{meridian}}</div>',
+            'error' => '<div class="error-message invalid-feedback">{{content}}</div>',
+            'errorInline' => '<div class="error-message invalid-feedback">{{content}}</div>',
             'errorList' => '<ul>{{content}}</ul>',
             'errorItem' => '<li>{{text}}</li>',
             'file' => '<input type="file" name="{{name}}" {{attrs}}>',
@@ -84,51 +84,58 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
             'formStart' => '<form{{attrs}}>',
             'formEnd' => '</form>',
             'formGroup' => '{{label}}{{prepend}}{{input}}{{append}}',
-            'formGroupHorizontal' => '{{label}}<div class="{{inputColumnClass}}">{{prepend}}{{input}}{{append}}</div>',
+            'formGroupHorizontal' => '{{label}}<div class="{{inputColumnClass}}">{{prepend}}{{input}}{{append}}{{error}}</div>',
             'hiddenBlock' => '<div style="display:none;">{{content}}</div>',
             'input' => '<input type="{{type}}" name="{{name}}" class="form-control{{attrs.class}}" {{attrs}} />',
             'inputSubmit' => '<input type="{{type}}"{{attrs}}>',
             'inputContainer' => '<div class="form-group {{type}}{{required}}">{{content}}</div>',
+            'inputContainerHorizontal' => '<div class="form-group row {{type}}{{required}}">{{content}}</div>',
             'inputContainerError' => '<div class="form-group has-error {{type}}{{required}}">{{content}}{{error}}</div>',
-            'label' => '<label class="control-label{{attrs.class}}"{{attrs}}>{{text}}</label>',
-            'labelHorizontal' => '<label class="control-label {{labelColumnClass}}{{attrs.class}}"{{attrs}}>{{text}}</label>',
+            'inputContainerErrorHorizontal' => '<div class="form-group row has-error {{type}}{{required}}">{{content}}</div>',
+            'label' => '<label{{attrs}}>{{text}}</label>',
+            'labelHorizontal' => '<label class="col-form-label {{labelColumnClass}}{{attrs.class}}"{{attrs}}>{{text}}</label>',
             'labelInline' => '<label class="sr-only{{attrs.class}}"{{attrs}}>{{text}}</label>',
-            'nestingLabel' => '{{hidden}}<label{{attrs}}>{{input}}{{text}}</label>',
+            'nestingLabel' => '{{hidden}}<label class="form-check-label{{attrs.class}}"{{attrs}}>{{input}} {{text}}</label>',
             'legend' => '<legend>{{text}}</legend>',
+            'labelLegend' => '<label{{attrs}}>{{text}}</label>',
+            'labelLegendHorizontal' => '<legend class="col-form-label pt-0 {{labelColumnClass}}{{attrs.class}}"{{attrs}}>{{text}}</legend>',
             'option' => '<option value="{{value}}"{{attrs}}>{{text}}</option>',
             'optgroup' => '<optgroup label="{{label}}"{{attrs}}>{{content}}</optgroup>',
             'select' => '<select name="{{name}}" class="form-control{{attrs.class}}" {{attrs}}>{{content}}</select>',
             'selectColumn' => '<div class="col-md-{{columnSize}}"><select name="{{name}}" class="form-control{{attrs.class}}" {{attrs}}>{{content}}</select></div>',
             'selectMultiple' => '<select name="{{name}}[]" multiple="multiple" class="form-control{{attrs.class}}" {{attrs}}>{{content}}</select>',
-            'radio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
-            'radioWrapper' => '<div class="radio">{{label}}</div>',
-            'radioContainer' => '<div class="form-group">{{content}}</div>',
-            'inlineRadio' => '<input type="radio" name="{{name}}" value="{{value}}"{{attrs}}>',
-            'inlineRadioWrapper' => '{{label}}',
-            'inlineRadioNestingLabel' => '{{hidden}}<label{{attrs}} class="radio-inline">{{input}}{{text}}</label>',
+            'radio' => '<input type="radio" class="form-check-input{{attrs.class}}" name="{{name}}" value="{{value}}"{{attrs}}>',
+            'radioWrapper' => '<div class="form-check">{{label}}</div>',
+            'radioContainer' => '<fieldset class="form-group {{type}}{{required}}">{{content}}</fieldset>',
+            'radioContainerHorizontal' => '<fieldset class="form-group {{type}}{{required}}"><div class="row">{{content}}</div></fieldset>',
+            'inlineRadio' => '<input type="radio" class="form-check-input{{attrs.class}}" name="{{name}}" value="{{value}}"{{attrs}}>',
+            'inlineRadioWrapper' => '<div class="form-check form-check-inline">{{label}}</div>',
+            'inlineradioContainer' => '<fieldset class="form-group {{type}}{{required}}">{{content}}</fieldset>',
+            'inlineradioContainerHorizontal' => '<fieldset class="form-group {{type}}{{required}}"><div class="row">{{content}}</div></fieldset>',
             'textarea' => '<textarea name="{{name}}" class="form-control{{attrs.class}}" {{attrs}}>{{value}}</textarea>',
-            'submitContainer' => '<div class="form-group">{{submitContainerHorizontalStart}}{{content}}{{submitContainerHorizontalEnd}}</div>',
-            'submitContainerHorizontal' => '<div class="form-group"><div class="{{inputColumnOffsetClass}} {{inputColumnClass}}">{{content}}</div></div>',
+            'submitContainer' => '<div class="form-group">{{content}}</div>',
+            'submitContainerHorizontal' => '<div class="form-group row"><div class="{{labelColumnClass}}"></div><div class="{{inputColumnClass}}">{{content}}</div></div>',
 
             'inputGroup' => '{{inputGroupStart}}{{input}}{{inputGroupEnd}}',
             'inputGroupStart' => '<div class="input-group">{{prepend}}',
             'inputGroupEnd' => '{{append}}</div>',
-            'inputGroupAddons' => '<span class="input-group-addon">{{content}}</span>',
-            'inputGroupButtons' => '<span class="input-group-btn">{{content}}</span>',
-            'helpBlock' => '<p class="help-block">{{content}}</p>',
-            'buttonGroup' => '<div class="btn-group{{attrs.class}}"{{attrs}}>{{content}}</div>',
-            'buttonToolbar' => '<div class="btn-toolbar{{attrs.class}}"{{attrs}}>{{content}}</div>',
+            'inputGroupAddons' => '<div class="input-group-{{type}}">{{content}}</div>',
+            'inputGroupText' => '<span class="input-group-text">{{content}}</span>',
+            'helpBlock' => '<small class="help-block form-text text-muted">{{content}}</small>',
+            'buttonGroup' => '<div class="btn-group{{attrs.class}}" role="group"{{attrs}}>{{content}}</div>',
+            'buttonGroupVertical' => '<div class="btn-group-vertical{{attrs.class}}" role="group"{{attrs}}>{{content}}</div>',
+            'buttonToolbar' => '<div class="btn-toolbar{{attrs.class}}" role="toolbar"{{attrs}}>{{content}}</div>',
             'fancyFileInput' => '{{fileInput}}<div class="input-group"><div class="input-group-btn">{{button}}</div>{{input}}</div>',
-            'selectedClass' => 'selected'
+            'confirmJs' => '{{confirm}}',
+            'selectedClass' => 'selected',
         ],
         'buttons' => [
-            'type' => 'default'
+            'type' => 'primary'
         ],
         'columns' => [
             'md' => [
                 'label' => 2,
-                'input' => 10,
-                'error' => 0
+                'input' => 10
             ]
         ],
         'useCustomFileInput' => false
@@ -145,12 +152,12 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
         'checkbox' => ['Cake\View\Widget\CheckboxWidget'],
         'file' => ['Cake\View\Widget\FileWidget'],
         'fancyFile' => ['Bootstrap\View\Widget\FancyFileWidget', 'file', 'button', 'basic'],
-        'label' => ['Cake\View\Widget\LabelWidget'],
+        'label' => ['Bootstrap\View\Widget\LabelLegendWidget'],
         'nestingLabel' => ['Cake\View\Widget\NestingLabelWidget'],
         'multicheckbox' => ['Cake\View\Widget\MultiCheckboxWidget', 'nestingLabel'],
         'radio' => ['Cake\View\Widget\RadioWidget', 'nestingLabel'],
         'inlineRadioNestingLabel' => ['Bootstrap\View\Widget\InlineRadioNestingLabelWidget'],
-        'inlineRadio' => ['Bootstrap\View\Widget\InlineRadioWidget', 'inlineRadioNestingLabel'],
+        'inlineRadio' => ['Bootstrap\View\Widget\InlineRadioWidget', 'nestingLabel'],
         'select' => ['Cake\View\Widget\SelectBoxWidget'],
         'selectColumn' => ['Bootstrap\View\Widget\ColumnSelectBoxWidget'],
         'textarea' => ['Cake\View\Widget\TextareaWidget'],
@@ -183,9 +190,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
                 else if ($that->inline) $data['templateName'] .= 'Inline';
                 $data += [
                     'inputColumnClass' => $this->_getColumnClass('input'),
-                    'labelColumnClass' => $this->_getColumnClass('label'),
-                    'errorColumnClass' => $this->_getColumnClass('error'),
-                    'inputColumnOffsetClass' => $this->_getColumnClass('label', true),
+                    'labelColumnClass' => $this->_getColumnClass('label')
                 ];
                 if (!$that->getTemplates($data['templateName'])) {
                     $data['templateName'] = $name;
@@ -229,7 +234,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string An formatted opening FORM tag.
      */
-    public function create($model = null, Array $options = array()): string {
+    public function create($model = null, array $options = []): string {
         $options += [
             'horizontal' => false,
             'inline' => false
@@ -276,7 +281,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string The classes for the size or offset of the specified column.
      */
-    protected function _getColumnClass($what, $offset = false) {
+    protected function _getColumnClass($what) {
         $columns = $this->getConfig('columns');
         $classes = [];
         foreach ($columns as $cl => $arr) {
@@ -284,20 +289,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
                 continue;
             }
             $value = $arr[$what];
-            if ($what === 'error') {
-                if ($value == 0) {
-                    $offset = $arr['label'];
-                    $value = 12 - $arr['label'];
-                }
-                else {
-                    $offset = 0;
-                }
-                $classes[] = 'col-'.$cl.'-offset-'.$offset;
-                $classes[] = 'col-'.$cl.'-'.$value;
-            }
-            else {
-                $classes[] = 'col-'.$cl.'-'.($offset ? 'offset-' : '').$value;
-            }
+            $classes[] = 'col-'.$cl.'-'.$value;
         }
         return implode(' ', $classes);
     }
@@ -315,23 +307,28 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string The elements wrapped in a suitable HTML element.
      */
-    protected function _wrapInputGroup($addonOrButtons) {
+    protected function _wrapInputGroup($addonOrButtons, $type) {
         if ($addonOrButtons) {
-            $template = 'inputGroupButtons';
-            if (is_string($addonOrButtons)) {
-                $addonOrButtons = $this->_makeIcon($addonOrButtons);
-                if (!Matching::findTagOrAttribute(
-                        'button', ['type' => 'submit'], $addonOrButtons)) {
-                    $template = 'inputGroupAddons';
-                }
-            }
-            else {
+            if (is_array($addonOrButtons)) {
                 $addonOrButtons = implode('', $addonOrButtons);
+            } else {
+                $addonOrButtons = $this->_makeIcon($addonOrButtons);
             }
-            $addonOrButtons = $this->formatTemplate($template, [
+
+            $isButton = strpos($addonOrButtons, '<button') === 0;
+            $isDropdown = strpos($addonOrButtons, 'data-toggle="dropdown"');
+            if (!$isButton && !$isDropdown) {
+                $addonOrButtons = $this->formatTemplate('inputGroupText', [
+                    'content' => $addonOrButtons
+                ]);
+            }
+
+            $addonOrButtons = $this->formatTemplate('inputGroupAddons', [
+                'type' => strtolower($type),
                 'content' => $addonOrButtons
             ]);
         }
+
         return $addonOrButtons;
     }
 
@@ -368,7 +365,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      * opening `<div>` for an input group.
      */
     public function prepend($input, $prepend) {
-        $prepend = $this->_wrapInputGroup($prepend);
+        $prepend = $this->_wrapInputGroup($prepend, 'prepend');
         if ($input === null) {
             return $this->formatTemplate('inputGroupStart', ['prepend' => $prepend]);
         }
@@ -386,7 +383,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      * closing `</div>` for an input group.
      */
     public function append($input, $append) {
-        $append = $this->_wrapInputGroup($append);
+        $append = $this->_wrapInputGroup($append, 'append');
         if ($input === null) {
             return $this->formatTemplate('inputGroupEnd', ['append' => $append]);
         }
@@ -448,7 +445,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @return string Completed form widget.
      */
-    public function control($fieldName, array $options = array()): string {
+    public function control($fieldName, array $options = []): string {
 
         $options += [
             'type' => null,
@@ -512,6 +509,16 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
         return parent::_getInput($fieldName, $options);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+     protected function _inputLabel(string $fieldName, $label = null, array $options = []): string {
+        $groupTypes = ['radio', 'inlineradio', 'multicheckbox', 'date', 'time', 'datetime'];
+        if (in_array($options['type'], $groupTypes, true)) {
+            $options['id'] = false;
+        }
+        return parent::_inputLabel($fieldName, $label, $options);
+     }
 
     /**
      * Creates a set of inline radio widgets.
@@ -583,13 +590,12 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * ### Options
      *
-     * - `bootstrap-type` Twitter bootstrap button type (primary, danger, info, etc.)
-     * - `bootstrap-size` Twitter bootstrap button size (mini, small, large)
+     * - `block` Twitter bootstrap button block (true or false, default false).
+     * - `btype` Twitter bootstrap button type (primary, danger, info, etc.).
+     * - `size` Twitter bootstrap button size (mini, small, large).
      * - `escape` HTML entity encode the $title of the button. Defaults to `false`.
      *
-     * @param string $title The button's caption. Not automatically HTML encoded
-     * @param array $options Array of options and HTML attributes.
-     *
+     * @param string $title The button's caption. Not automatically HTML encoded.
      * @return string A HTML button tag.
      *
      * @link http://book.cakephp.org/3.0/en/views/helpers/form.html#creating-button-elements
@@ -597,6 +603,30 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
     public function button($title, array $options = []): string {
         list($options, $easyIcon) = $this->_easyIconOption($options);
         return $this->_injectIcon(parent::button($title, $this->_addButtonClasses($options)), $easyIcon);
+    }
+
+    /**
+     * Alternative to the `button` method allowing the type of the button to be set as an
+     * argument.
+     *
+     * @param string $title The button's caption. Not automatically HTML encoded.
+     * @param string|array $type If array, behaves like options, otherwize will be used as
+     * the `btype` option.
+     * @param array $options Array of options and HTML attributes.
+     *
+     * @return string A HTML button tag.
+     */
+    public function cbutton($title, $type = [], array $options = []) {
+        if (is_array($type)) {
+            $options = $type;
+            $type = null;
+        }
+        if ($type !== null) {
+            $options += [
+                'btype' => $type
+            ];
+        }
+        return $this->button($title, $options);
     }
 
     /**
@@ -617,10 +647,11 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
             'vertical' => false,
             'templateVars' => []
         ];
+        $template = 'buttonGroup';
         if ($options['vertical']) {
-            $options = $this->addClass($options, 'btn-group-vertical');
+            $template = 'buttonGroupVertical';
         }
-        return $this->formatTemplate('buttonGroup', [
+        return $this->formatTemplate($template, [
             'content' => implode('', $buttons),
             'attrs' => $this->templater()->formatAttributes($options, ['vertical']),
             'templateVars' => $options['templateVars']
@@ -678,7 +709,9 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
         $options += [
             'type' => false,
             'dropup' => false,
-            'data-toggle' => 'dropdown'
+            'data-toggle' => 'dropdown',
+            'aria-haspopup' => 'true',
+            'aria-expanded' => 'false'
         ];
         $dropup = $options['dropup'];
         unset($options['dropup']);
@@ -689,11 +722,11 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
         }
 
         $options = $this->addClass($options, 'dropdown-toggle');
+
         return $this->buttonGroup([
-            $this->button($title.' <span class="caret"></span>', $options),
+            $this->button($title, $options),
             $this->Html->dropdown($menu, $ulOptions)
         ], $bGroupOptions);
-
     }
 
     /**
@@ -703,8 +736,9 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * ### Options
      *
-     * - `bootstrap-size` Twitter bootstrap button size (mini, small, large)
-     * - `bootstrap-type` Twitter bootstrap button type (primary, danger, info, etc.)
+     * - `block` Twitter bootstrap button block (true or false, default false).
+     * - `btype` Twitter bootstrap button type (primary, danger, info, etc.).
+     * - `size` Twitter bootstrap button size (mini, small, large).
      * - `templateVars` Additional template variables for the input element and its container.
      * - `type` Set to 'reset' for reset inputs. Defaults to 'submit'
      * - Other attributes will be assigned to the input element.
@@ -719,10 +753,32 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      * @return string A HTML submit button
      * @link http://book.cakephp.org/3.0/en/views/helpers/form.html#creating-buttons-and-submit-elements
      */
-    public function submit($caption = null, array $options = array()): string {
+    public function submit($caption = null, array $options = []): string {
         return parent::submit($caption, $this->_addButtonClasses($options));
     }
 
+    /**
+     * See FormHelper::submit.
+     *
+     * @param string $captio See `FormHelper::submit` documentation.
+     * @param string|array $type If array, behaves like options, otherwize will be used as
+     * the `btype` option.
+     * @param array $options Array of options and HTML attributes, see `FormHelper::submit`.
+     *
+     * @return string A HTML submit button.
+     */
+    public function csubmit($caption = null, $type = [], array $options = []) {
+        if (is_array($type)) {
+            $options = $type;
+            $type = null;
+        }
+        if ($type !== null) {
+            $options += [
+                'btype' => $type
+            ];
+        }
+        return $this->submit($caption, $options);
+    }
 }
 
 ?>

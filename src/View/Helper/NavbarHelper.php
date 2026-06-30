@@ -39,7 +39,7 @@ class NavbarHelper extends Helper {
      * @var array
      */
     public $helpers = [
-        'Form', 'Html', 'Url'
+        'Html', 'Url'
     ];
 
     /**
@@ -54,42 +54,39 @@ class NavbarHelper extends Helper {
      */
     public $_defaultConfig = [
         'templates' => [
-            'navbarStart' => '<nav class="navbar navbar-{{type}}{{attrs.class}}"{{attrs}}>{{containerStart}}{{header}}{{responsiveStart}}',
+            'navbarStart' => '<nav class="navbar{{attrs.class}}"{{attrs}}>{{containerStart}}{{header}}{{responsiveStart}}',
             'navbarEnd' => '{{responsiveEnd}}{{containerEnd}}</nav>',
-            'containerStart' => '<div class="{{containerClass}}{{attrs.class}}"{{attrs}}>',
+            'containerStart' => '<div class="container{{attrs.class}}"{{attrs}}>',
             'containerEnd' => '</div>',
             'responsiveStart' => '<div class="collapse navbar-collapse{{attrs.class}}" id="{{id}}"{{attrs}}>',
             'responsiveEnd' => '</div>',
-            'header' => '<div class="navbar-header{{attrs.class}}"{{attrs}}>{{toggleButton}}{{brand}}</div>',
+            'header' => '{{brand}}{{toggleButton}}',
             'toggleButton' =>
-'<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#{{id}}" aria-expanded="false">
-    <span class="sr-only">{{content}}</span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
+'<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#{{id}}" aria-controls="{{id}}" aria-label="{{label}}" aria-expanded="false">
+    <span class="navbar-toggler-icon"></span>
 </button>',
             'brand' => '<a class="navbar-brand{{attrs.class}}" href="{{url}}"{{attrs}}>{{content}}</a>',
             'brandImage' => '<img alt="{{brandname}}" src="{{src}}"{{attrs}} />',
-            'dropdownMenuStart' => '<ul class="dropdown-menu{{attrs.class}}"{{attrs}}>',
-            'dropdownMenuEnd' => '</ul>',
+            'dropdownMenuStart' => '<div class="dropdown-menu{{attrs.class}}"{{attrs}}>',
+            'dropdownMenuEnd' => '</div>',
             'dropdownLink' =>
-'<a href="{{url}}" class="dropdown-toggle{{attrs.class}}" data-toggle="dropdown" role="button"
-aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
-            'innerMenuStart' => '<li class="dropdown{{attrs.class}}"{{attrs}}>{{dropdownLink}}{{dropdownMenuStart}}',
+'<a href="{{url}}" class="nav-link dropdown-toggle{{attrs.class}}" data-toggle="dropdown" role="button"
+aria-haspopup="true" aria-expanded="false">{{content}}</a>',
+            'innerMenuStart' => '<li class="nav-item dropdown{{attrs.class}}"{{attrs}}>{{dropdownLink}}{{dropdownMenuStart}}',
             'innerMenuEnd' => '{{dropdownMenuEnd}}</li>',
-            'innerMenuItem' => '<li{{attrs}}>{{link}}</li>',
-            'innerMenuItemLink' => '<a href="{{url}}"{{attrs}}>{{content}}</a>',
-            'innerMenuItemActive' => '<li class="active{{attrs.class}}"{{attrs}}>{{link}}</li>',
-            'innerMenuItemLinkActive' => '<a href="{{url}}"{{attrs}}>{{content}}</a>',
-            'innerMenuItemDivider' => '<li role="separator" class="divider{{attrs.class}}"{{attrs}}></li>',
-            'innerMenuItemHeader' => '<li class="dropdown-header{{attrs.class}}"{{attrs}}>{{content}}</li>',
-            'outerMenuStart' => '<ul class="nav navbar-nav{{attrs.class}}"{{attrs}}>',
+            'innerMenuItem' => '{{link}}',
+            'innerMenuItemLink' => '<a href="{{url}}" class="dropdown-item{{attrs.class}}"{{attrs}}>{{content}}</a>',
+            'innerMenuItemActive' => '{{link}}',
+            'innerMenuItemLinkActive' => '<a href="{{url}}" class="dropdown-item active{{attrs.class}}"{{attrs}}>{{content}}</a>',
+            'innerMenuItemDivider' => '<div role="separator" class="dropdown-divider{{attrs.class}}"{{attrs}}></div>',
+            'innerMenuItemHeader' => '<h6 class="dropdown-header{{attrs.class}}"{{attrs}}>{{content}}</h6>',
+            'outerMenuStart' => '<ul class="navbar-nav mr-auto{{attrs.class}}"{{attrs}}>',
             'outerMenuEnd' => '</ul>',
-            'outerMenuItem' => '<li{{attrs}}>{{link}}</li>',
-            'outerMenuItemLink' => '<a href="{{url}}"{{attrs}}>{{content}}</a>',
-            'outerMenuItemActive' => '<li class="active{{attrs.class}}"{{attrs}}>{{link}}</li>',
-            'outerMenuItemLinkActive' => '<a href="{{url}}"{{attrs}}>{{content}}</a>',
-            'navbarText' => '<p class="navbar-text{{attrs.class}}"{{attrs}}>{{content}}</p>',
+            'outerMenuItem' => '<li class="nav-item{{attrs.class}}"{{attrs}}>{{link}}</li>',
+            'outerMenuItemLink' => '<a href="{{url}}" class="nav-link{{attrs.class}}"{{attrs}}>{{content}}</a>',
+            'outerMenuItemActive' => '<li class="nav-item active{{attrs.class}}"{{attrs}}>{{link}}</li>',
+            'outerMenuItemLinkActive' => '<a href="{{url}}" class="nav-link{{attrs.class}}"{{attrs}}>{{content}}</a>',
+            'navbarText' => '<span class="navbar-text{{attrs.class}}"{{attrs}}>{{content}}</span>',
         ],
         'templateClass' => 'Bootstrap\View\EnhancedStringTemplate',
         'autoActiveLink' => true
@@ -113,11 +110,13 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
      * Create a new navbar.
      *
      * ### Options:
-     * - `fixed` [Fixed navbar](http://getbootstrap.com/components/#navbar-fixed-top). Possible values are `'top'`, `'bottom'`, `false`. Default is `false`.
-     * - `fluid` Fluid navabar. Default is `false`.
-     * - `inverse` [Inverted navbar](http://getbootstrap.com/components/#navbar-inverted). Default is `false`.
-     * - `responsive` Responsive navbar. Default is `true`.
-     * - `static` [Static navbar](http://getbootstrap.com/components/#navbar-static-top). Default is `false`.
+     * - `container` Wrap the inner content inside a container. Default is `false`.
+     * - `fixed` [Fixed navbar](https://getbootstrap.com/docs/4.0/components/navbar/#placement). Possible values are `'top'`, `'bottom'`, `false`. Default is `false`.
+     * - `theme` [Navbar theme](https://getbootstrap.com/docs/4.0/components/navbar/#color-schemes). Either a `'light'`, `'dark'` or an array with]
+     * 2 values corresponding to the theme and the background (e.g. `['dark', 'primary']`). Can also be set to `false` to disable automatic theming. Default is `'light'`.
+     * - `collapse` Specify when the navbar should collapse. Possible values are `false` (never), `true` (always) or a string (`'lg'`, `'xl'`, ...).
+     * Default is `'lg'`.
+     * - `sticky` [Sticky navbar](https://getbootstrap.com/docs/4.0/components/navbar/#placement). Default is `false`.
      * - `templateVars` Provide template variables for the template.
      * - Other attributes will be assigned to the navbar element.
      *
@@ -131,27 +130,41 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
         $options += [
             'id' => 'navbar',
             'fixed' => false,
-            'responsive' => true,
-            'static' => false,
-            'inverse' => false,
-            'fluid' => false,
+            'collapse' => 'lg',
+            'sticky' => false,
+            'theme' => 'light',
+            'container' => false,
             'templateVars' => []
         ];
 
-        $this->_responsive = $options['responsive'];
-        $fixed = $options['fixed'];
-        $static = $options['static'];
-        $inverse = $options['inverse'];
-        $fluid = $options['fluid'];
+        $this->_responsive = $options['collapse'] !== false;
+        $this->_container = $options['container'];
 
         /** Generate options for outer div. **/
-        $type = $inverse ? 'inverse' : 'default';
-
-        if ($fixed !== false) {
-            $options = $this->addClass($options, 'navbar-fixed-'.$fixed);
+        if ($options['theme'] !== false) {
+            $scheme = $options['theme'];
+            $bg = null;
+            if (is_array($scheme)) {
+                list($scheme, $bg) = $scheme;
+            }
+            if ($bg === null) {
+                $bg = $scheme;
+            }
+            $options = $this->addClass($options, 'navbar-'.$scheme);
+            if ($bg !== false) {
+                $options = $this->addClass($options, 'bg-'.$bg);
+            }
         }
-        if ($static !== false) {
-            $options = $this->addClass($options, 'navbar-static-top');
+
+        if ($options['fixed'] !== false) {
+            $fixed = $options['fixed'];
+            if ($fixed === true) {
+                $fixed = 'top';
+            }
+            $options = $this->addClass($options, 'fixed-'.$fixed);
+        }
+        if ($options['sticky'] !== false) {
+            $options = $this->addClass($options, 'sticky-top');
         }
 
         if ($brand) {
@@ -172,16 +185,24 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
         $toggleButton = '';
         if ($this->_responsive) {
             $toggleButton = $this->formatTemplate('toggleButton', [
-                'content' => __('Toggle navigation'),
+                'label' => __('Toggle navigation'),
                 'id' => $options['id']
             ]);
+            if ($options['collapse'] !== true) {
+                $options = $this->addClass($options, 'navbar-expand-'.$options['collapse']);
+            }
+        }
+        else {
+            $options = $this->addClass($options, 'navbar-expand');
         }
 
-        $containerStart = $this->formatTemplate('containerStart', [
-            'containerClass' => $fluid ? 'container-fluid' : 'container',
-            'attrs' => $this->templater()->formatAttributes([]),
-            'templateVars' => $options['templateVars']
-        ]);
+        $containerStart = '';
+        if ($this->_container) {
+            $containerStart = $this->formatTemplate('containerStart', [
+                'attrs' => $this->templater()->formatAttributes([]),
+                'templateVars' => $options['templateVars']
+            ]);
+        }
 
         $responsiveStart = '';
         if ($this->_responsive) {
@@ -202,10 +223,9 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
 
         return $this->formatTemplate('navbarStart', [
             'header' => $header,
-            'type' => $type,
             'responsiveStart' => $responsiveStart,
             'containerStart' => $containerStart,
-            'attrs' => $this->templater()->formatAttributes($options, ['id', 'fixed', 'responsive', 'static', 'fluid', 'inverse']),
+            'attrs' => $this->templater()->formatAttributes($options, ['id', 'fixed', 'collapse', 'sticky', 'theme', 'container']),
             'templateVars' => $options['templateVars']
         ]);
     }
@@ -225,8 +245,10 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
      *
      * @param string $name The link text.
      * @param string|array $url The link URL (CakePHP way).
-     * @param array $options Array of attributes for the wrapper tag.
-     * @param array $linkOptions Array of attributes for the link.
+     * @param array $options Array of attributes for the wrapper tag (outer menu) or
+     * the link (inner menu).
+     * @param array $linkOptions Array of attributes for the link in outer menu. Not used
+     * if in inner menu.
      *
      * @return string A HTML tag wrapping the link.
      */
@@ -249,10 +271,16 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
         $level = $this->_level > 1 ? 'inner' : 'outer';
         $template = $level.'MenuItem'.$active;
         $linkTemplate = $level.'MenuItemLink'.$active;
+
+        // inner menu, no wrapper elements, options go directly for link
+        if ($level === 'inner') {
+            $linkOptions = $options;
+        }
+
         $link = $this->formatTemplate($linkTemplate, [
             'content' => $name,
             'url' => $url,
-            'attrs' => $this->templater()->formatAttributes($linkOptions),
+            'attrs' => $this->templater()->formatAttributes($linkOptions, ['active']),
             'templateVars' => $linkOptions['templateVars']
         ]);
         return $this->formatTemplate($template, [
@@ -260,22 +288,6 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
             'attrs' => $this->templater()->formatAttributes($options, ['active']),
             'templateVars' => $options['templateVars']
         ]);
-    }
-
-    /**
-     * Add a button to the navbar.
-     *
-     * @param string $name Text of the button.
-     * @param array $options Options sent to the `Form::button` method.
-     *
-     * @return string A HTML navbar button.
-     */
-    public function button($name, array $options = []) {
-        $options += [
-            'type' => 'button'
-        ];
-        $options = $this->addClass($options, 'navbar-btn');
-        return $this->Form->button($name, $options);
     }
 
     /**
@@ -337,16 +349,6 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
         $options += [
             'templateVars' => []
         ];
-        $text = preg_replace_callback('/<a([^>]*)?>([^<]*)?<\/a>/i', function($matches) {
-            $attrs = preg_replace_callback ('/class="(.*)?"/', function ($m) {
-                $cl = $this->addClass (['class' => $m[1]], 'navbar-link');
-                return 'class="'.$cl['class'].'"';
-            }, $matches[1], -1, $count);
-            if ($count == 0) {
-                $attrs .= ' class="navbar-link"';
-            }
-            return '<a'.$attrs.'>'.$matches[2].'</a>';
-        }, $text);
         return $this->formatTemplate('navbarText', [
             'content' => $text,
             'attrs' => $this->templater()->formatAttributes($options),
@@ -376,7 +378,6 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
      *
      * ### Link Options
      *
-     * - `caret` HTML caret element. Default is `'<span class="caret"></span>'`.
      * - Other attributes will be assigned to the link element.
      *
      * ### List Options
@@ -402,15 +403,11 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
             'templateVars' => []
         ];
         if ($this->_level == 1) {
-            $linkOptions += [
-                'caret' => '<span class="caret"></span>'
-            ];
             $template = 'innerMenuStart';
             $templateOptions['dropdownLink'] = $this->formatTemplate('dropdownLink', [
                 'content' => $name,
-                'caret' => $linkOptions['caret'],
                 'url' => $url ? $this->Url->build($url) : '#',
-                'attrs' => $this->templater()->formatAttributes($linkOptions, ['caret'])
+                'attrs' => $this->templater()->formatAttributes($linkOptions)
             ]);
             $templateOptions['dropdownMenuStart'] = $this->formatTemplate('dropdownMenuStart', [
                 'attrs' => $this->templater()->formatAttributes($listOptions)
@@ -445,7 +442,10 @@ aria-haspopup="true" aria-expanded="false">{{content}}{{caret}}</a>',
      * @return string HTML elements to close the navbar.
      */
     public function end() {
-        $containerEnd = $this->formatTemplate('containerEnd', []);
+        $containerEnd = '';
+        if ($this->_container) {
+            $containerEnd = $this->formatTemplate('containerEnd', []);
+        }
         $responsiveEnd = '';
         if ($this->_responsive) {
             $responsiveEnd = $this->formatTemplate('responsiveEnd', []);

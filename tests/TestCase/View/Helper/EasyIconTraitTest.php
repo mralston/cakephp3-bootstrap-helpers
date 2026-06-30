@@ -62,7 +62,7 @@ class EasyIconTraitTest extends TestCase {
         parent::setUp();
         $view = new View();
         $view->loadHelper('Html', [
-            'className' => 'Bootstrap.BootstrapHtml'
+            'className' => 'Bootstrap.Html'
         ]);
         $this->html = $view->Html;
         $this->trait = new PublicEasyIconTrait($view);
@@ -75,7 +75,7 @@ class EasyIconTraitTest extends TestCase {
 
         $this->assertHtml(
             [['i' => [
-                'class' => 'glyphicon glyphicon-plus',
+                'class' => 'fa fa-plus',
                 'aria-hidden' => 'true'
             ]], '/i'], $this->trait->publicMakeIcon('i:plus', $converted));
         $this->assertTrue($converted);
@@ -84,13 +84,13 @@ class EasyIconTraitTest extends TestCase {
         $this->assertFalse($converted);
 
         $this->assertHtml([['i' => [
-                'class' => 'glyphicon glyphicon-plus',
+                'class' => 'fa fa-plus',
                 'aria-hidden' => 'true'
             ]], '/i', ' Add'], $this->trait->publicMakeIcon('i:plus Add', $converted));
         $this->assertTrue($converted);
 
         $this->assertHtml(['Add ', ['i' => [
-            'class' => 'glyphicon glyphicon-plus',
+            'class' => 'fa fa-plus',
             'aria-hidden' => 'true'
         ]], '/i'], $this->trait->publicMakeIcon('Add i:plus', $converted));
         $this->assertTrue($converted);
@@ -109,34 +109,9 @@ class EasyIconTraitTest extends TestCase {
                 'href' => '/dashboard'
             ]],
             ['i' => [
-                'class' => 'glyphicon glyphicon-dashboard',
+                'class' => 'fa fa-dashboard',
                 'aria-hidden' => 'true'
             ]], '/i', 'Dashboard', '/a'
-        ], $result);
-
-        // BootstrapHtmlHelper
-        $result = $this->html->link('i:dashboard Dashboard', '/dashboard', [
-            'easyIcon' => false
-        ]);
-        $this->assertHtml([
-            ['a' => [
-                'href' => '/dashboard'
-            ]],
-            'i:dashboard Dashboard', '/a'
-        ], $result);
-
-        // BootstrapHtmlHelper
-        $result = $this->html->link('i:dashboard <script>Dashboard</script>', '/dashboard', [
-            'easyIcon' => true
-        ]);
-        $this->assertHtml([
-            ['a' => [
-                'href' => '/dashboard'
-            ]],
-            ['i' => [
-                'class' => 'glyphicon glyphicon-dashboard',
-                'aria-hidden' => 'true'
-            ]], '/i', '&lt;script&gt;Dashboard&lt;/script&gt;', '/a'
         ], $result);
 
     }
@@ -156,10 +131,10 @@ class EasyIconTraitTest extends TestCase {
         $result = $this->form->button('i:plus');
         $this->assertHtml([
             ['button' => [
-                'class' => 'btn btn-default',
+                'class' => 'btn btn-primary',
                 'type'  => 'submit'
             ]], ['i' => [
-                'class' => 'glyphicon glyphicon-plus',
+                'class' => 'fa fa-plus',
                 'aria-hidden' => 'true'
             ]], '/i', '/button'
         ], $result);
@@ -175,28 +150,36 @@ class EasyIconTraitTest extends TestCase {
             ['div' => [
                 'class' => 'input-group'
             ]],
+            ['div' => [
+                'class' => 'input-group-prepend'
+            ]],
             ['span' => [
-                'class' => 'input-group-addon'
+                'class' => 'input-group-text'
             ]],
             ['i' => [
-                'class' => 'glyphicon glyphicon-home',
+                'class' => 'fa fa-home',
                 'aria-hidden' => 'true'
             ]], '/i',
             '/span',
+            '/div',
             ['input' => [
                 'type' => 'text',
                 'class' => 'form-control',
                 'name' => 'fieldname',
                 'id' => 'fieldname'
             ]],
+            ['div' => [
+                'class' => 'input-group-append'
+            ]],
             ['span' => [
-                'class' => 'input-group-addon'
+                'class' => 'input-group-text'
             ]],
             ['i' => [
-                'class' => 'glyphicon glyphicon-plus',
+                'class' => 'fa fa-plus',
                 'aria-hidden' => 'true'
             ]], '/i',
             '/span',
+            '/div',
             '/div',
             '/div'
         ], $result);

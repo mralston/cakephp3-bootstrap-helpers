@@ -2,24 +2,26 @@ CakePHP 3.x Helpers for Bootstrap
 =================================
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Travis](https://img.shields.io/travis/Holt59/cakephp3-bootstrap-helpers/master.svg?style=flat-square)](https://travis-ci.com/Holt59/cakephp3-bootstrap-helpers)
+[![Travis](https://img.shields.io/travis/Holt59/cakephp3-bootstrap-helpers/4.0.3.svg?style=flat-square)](https://travis-ci.com/Holt59/cakephp3-bootstrap-helpers)
 [![Packagist](https://img.shields.io/packagist/dt/holt59/cakephp3-bootstrap-helpers.svg?style=flat-square)](https://packagist.org/packages/holt59/cakephp3-bootstrap-helpers)
 
 CakePHP 3.x Helpers to generate HTML with @Twitter Boostrap style: `Breadcrumbs`, `Flash`, `Form`, `Html`, `Modal`, `Navbar`,
-`Panel` and `Paginator` helpers available!
+`Card` and `Paginator` helpers available!
 
 How to... ?
 ===========
 
 #### Installation
 
-If you want the latest **Bootstrap 3** version of the plugin:
+If you want the **Bootstrap 4** version of the plugin:
 
-- Add the plugin to your `composer.json` (see below if you want to use another branch / version):
+- Add the plugin to your `composer.json`:
 
-```
-composer require holt59/cakephp3-bootstrap-helpers:dev-master
-// Or the following if you want to use the Bootstrap 4 version (alpha)
+```bash
+# Stable version:
+composer require holt59/cakephp3-bootstrap-helpers:4.0.2
+
+# Development version (latest fixes):
 composer require holt59/cakephp3-bootstrap-helpers:dev-4.0.1-alpha
 ```
 
@@ -38,12 +40,31 @@ $this->loadHelper('Html', [
 ]);
 ```
 
+#### Breaking changes from previous versions
+
+- `FormHelper`:
+  - it is not possible to place error message in a separate column in horizontal form, the error message
+  will always be put below the input.
+
+- `NavbarHelper`:
+  - the following options of the `create()` methods have been removed or have had their meaning changed:
+    - `static` is now `sticky`
+    - `responsive` has been dropped and replace by a `collapse` option with the following meaning: `true`
+    for always collapsed, `false` for never collapsed, or a string representing indicating when the content
+    should collapse (`'lg'` is the default).
+    - `fluid` has been dropped.
+    - `container` is a new option (`bool`, default is `false`) to indicate if the content of the navbar
+    should be wrapped inside a `<div class="container"></div>`.
+    - `inverse` has been dropped.
+  - a new `theme` option has been added to the `create()` method to control, possible values are `'light'`,
+  `'dark'`, `false` (no theme), or an array `[$theme, $bg]`.
+  - when adding a `link()` to an inner menu, the `$linkOptions` parameters is not usable anymore and the
+  `$options` parameters should be used directly (their are no wrapping `<li>` anymore for inner menu).
+
 The full plugin documentation is available at https://holt59.github.io/cakephp3-bootstrap-helpers/.
 
 #### Table of version and requirements
 
-| Version | Bootstrap version | CakePHP version | Information |
-|---------|-------------------|-----------------|-------------|
 | Version | Bootstrap version | CakePHP version | Information |
 |---------|-------------------|-----------------|-------------|
 | [master](https://github.com/Holt59/cakephp3-bootstrap-helpers/tree/master) | 3 | >= 3.7.0 | Current active V3 branch. |
