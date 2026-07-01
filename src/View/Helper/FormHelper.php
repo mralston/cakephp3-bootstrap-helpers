@@ -59,6 +59,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
     protected array $_defaultConfig = [
         'idPrefix' => null,
         'errorClass' => 'is-invalid',
+        'nestedCheckboxAndRadio' => true,
         'typeMap' => [
             'string' => 'text', 'datetime' => 'datetime', 'boolean' => 'checkbox',
             'timestamp' => 'datetime', 'text' => 'textarea', 'time' => 'time',
