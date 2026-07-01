@@ -27,7 +27,7 @@ class BreadcrumbsHelper extends \Cake\View\Helper\BreadcrumbsHelper{
      * @var array
      * @link https://api.cakephp.org/3.3/class-Cake.View.Helper.BreadcrumbsHelper.html
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'templates' => [
             'wrapper' => '<ol class="breadcrumb{{attrs.class}}"{{attrs}}>{{content}}</ol>',
             'item' => '<li class="breadcrumb-item{{attrs.class}}"{{attrs}}><a href="{{url}}"{{innerAttrs}}>{{title}}</a></li>',

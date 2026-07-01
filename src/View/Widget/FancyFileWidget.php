@@ -14,6 +14,7 @@
  */
 namespace Bootstrap\View\Widget;
 
+use function Cake\I18n\__;
 use Cake\View\Widget\WidgetInterface;
 
 /**

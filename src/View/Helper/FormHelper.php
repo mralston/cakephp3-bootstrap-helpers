@@ -38,7 +38,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Url', 'Html'
     ];
 
@@ -56,7 +56,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'idPrefix' => null,
         'errorClass' => 'is-invalid',
         'typeMap' => [
@@ -146,7 +146,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
      *
      * @var array
      */
-    protected $_defaultWidgets = [
+    protected array $_defaultWidgets = [
         '_default' => ['Cake\View\Widget\BasicWidget'],
         'button' => ['Cake\View\Widget\ButtonWidget'],
         'checkbox' => ['Cake\View\Widget\CheckboxWidget'],
@@ -192,7 +192,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
                     'inputColumnClass' => $this->_getColumnClass('input'),
                     'labelColumnClass' => $this->_getColumnClass('label')
                 ];
-                if (!$that->getTemplates($data['templateName'])) {
+                if (!$that->getTemplate($data['templateName'])) {
                     $data['templateName'] = $name;
                 }
                 return $data;
@@ -498,7 +498,7 @@ class FormHelper extends \Cake\View\Helper\FormHelper {
     /**
      * {@inheritDoc}
      */
-    protected function _getInput($fieldName, $options) {
+    protected function _getInput($fieldName, $options): array|string {
         $label = $options['labelOptions'];
         switch (strtolower($options['type'])) {
             case 'inlineradio':

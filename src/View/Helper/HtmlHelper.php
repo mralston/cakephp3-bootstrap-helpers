@@ -14,6 +14,7 @@
  */
 namespace Bootstrap\View\Helper;
 
+use function Cake\I18n\__;
 use Bootstrap\Utility\Matching;
 
 /**
@@ -43,7 +44,7 @@ class HtmlHelper extends \Cake\View\Helper\HtmlHelper {
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'templates' => [
             'meta' => '<meta{{attrs}}/>',
             'metalink' => '<link href="{{url}}"{{attrs}}/>',

@@ -37,7 +37,7 @@ class CardHelper extends Helper {
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Html'
     ];
 
@@ -48,7 +48,7 @@ class CardHelper extends Helper {
      *
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'templates' => [
             'cardGroupStart' => '<div role="tablist"{{attrs}}>',
             'cardGroupEnd' => '</div>',
@@ -323,7 +323,7 @@ class CardHelper extends Helper {
         $out = $this->formatTemplate($current.'End', []);
         if ($this->_states->getValue('collapsible')) {
             $ctplt = $current.'CollapsibleEnd';
-            if ($this->getTemplates($ctplt)) {
+            if ($this->getTemplate($ctplt)) {
                 $out = $this->formatTemplate($ctplt, [
                     $current.'End' => $out
                 ]);

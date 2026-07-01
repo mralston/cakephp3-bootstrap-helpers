@@ -14,6 +14,7 @@
  */
 namespace Bootstrap\View\Helper;
 
+use function Cake\I18n\__;
 use Cake\View\Helper;
 use Cake\View\StringTemplateTrait;
 
@@ -38,7 +39,7 @@ class NavbarHelper extends Helper {
      *
      * @var array
      */
-    public $helpers = [
+    public array $helpers = [
         'Html', 'Url'
     ];
 
@@ -52,7 +53,7 @@ class NavbarHelper extends Helper {
      *
      * @var array
      */
-    public $_defaultConfig = [
+    public array $_defaultConfig = [
         'templates' => [
             'navbarStart' => '<nav class="navbar{{attrs.class}}"{{attrs}}>{{containerStart}}{{header}}{{responsiveStart}}',
             'navbarEnd' => '{{responsiveEnd}}{{containerEnd}}</nav>',
