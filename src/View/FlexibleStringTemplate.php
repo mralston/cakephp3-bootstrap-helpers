@@ -40,7 +40,7 @@ class FlexibleStringTemplate extends EnhancedStringTemplate {
      * retrieving any templates.
      * @param arra $callbacks An array of callbacks.
      */
-    public function __construct(array $config = [], callable $callback = null, array $callbacks = []) {
+    public function __construct(array $config = [], ?callable $callback = null, array $callbacks = []) {
         parent::__construct($config);
         $this->_callback = $callback;
         $this->_callbacks = $callbacks;
