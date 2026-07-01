@@ -142,7 +142,7 @@ aria-valuenow="{{width}}" aria-valuemin="{{min}}" aria-valuemax="{{max}}" style=
      */
     public function link($title, $url = null, array $options = []): string {
         list($options, $easyIcon) = $this->_easyIconOption($options);
-        return $this->_injectIcon(parent::link($title, $url, $options), $easyIcon);
+        return $this->_injectIcon(parent::link($title ?? '', $url, $options), $easyIcon);
     }
 
     /**
